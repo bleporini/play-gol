@@ -85,13 +85,7 @@ class GoLSuite extends FunSuite{
 
   test("Simple case one"){
     new Scenario1{
-      val next = computeNext(gameArea).sortWith(sorter)
-      println("shouldBe = " + shouldBeNext)
-      println("next     = " + next)
-
-      assert(shouldBeNext === next)
-
-      assert(computeNext(next).sortWith(sorter) === gameArea)
+      testSteps(computeNext,steps)
     }
   }
   test("Simple case 2"){
@@ -100,7 +94,7 @@ class GoLSuite extends FunSuite{
       println("shouldBe = " + shouldBeNext)
       println("next     = " + next)
 
-      assert(shouldBeNext === next)
+      assert(compareAreas(shouldBeNext,next))
 
     }
   }
@@ -110,7 +104,7 @@ class GoLSuite extends FunSuite{
     println("shouldBe = " + shouldBeNext)
     println("next     = " + next)
 
-    assert(shouldBeNext === next)
+    assert(compareAreas(shouldBeNext,next))
   }}
 
   test("Frog Scenario"){new FrogScenario {
@@ -118,12 +112,21 @@ class GoLSuite extends FunSuite{
     println("shouldBe = " + shouldBeNext)
     println("next     = " + next)
 
-    assert(shouldBeNext === next)
+    assert(compareAreas(shouldBeNext,next))
 
     val next2 = computeNext(next).sortWith(sorter)
-    assert(gameArea === next2)
-
+    assert(compareAreas(gameArea,next2))
 
   }}
+
+  test("Vaisseau"){new GliderScenario {
+    assert(testSteps(computeNext,steps))
+  }}
+
+  test("Wrong scenario"){new WrongScenario {
+    assert(!testSteps(computeNext,steps))
+  }}
+
+
 
 }
