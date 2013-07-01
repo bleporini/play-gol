@@ -4,39 +4,17 @@
  * Date: 24/06/13
  * Time: 08:47
  */
+
+import controllers.GameOfLifeController
 import org.scalatest.FunSuite
 import domain._
+import GameOfLifeController._
 
 
 class GoLSuite extends FunSuite{
 
 
-  def computeNext(origin:GameArea):GameArea= {
-    origin.foldLeft(List[Cell]()){ (acc,c)=>
-      val neighbours = findNeighbours(origin, c)
-      val alives = neighbours.foldLeft(0)((acc, elem) =>
-        if (elem.status == Alive) acc+1
-        else acc
-      )
-//      println("c = " + c)
-//      println("alives = " + alives)
-      if (alives == 3)
-        Cell(c.coordinates,Alive)::acc
-      else if (c.status == Alive && alives==2)
-        c::acc
-      else Cell(c.coordinates,Dead)::acc
-    }
-  }
 
-  def findNeighbours(area:GameArea, cell:Cell)={
-    val (x,y)=cell.coordinates
-    area.filter(c =>  c.coordinates match{
-        case (i,j) if x==i => (y-j).abs == 1
-        case (i,j) if y==j => (x-i).abs == 1
-        case (i,j) => (x-i).abs ==1 && (y-j).abs==1
-      }
-    )
-  }
 
   test("find neighbours"){
     val a = Cell((1, 1), Dead)
