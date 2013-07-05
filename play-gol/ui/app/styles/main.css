@@ -1,0 +1,41 @@
+body {
+    background: #fafafa;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #333;
+}
+
+.hero-unit {
+    margin: 50px auto 0 auto;
+    width: 300px;
+    font-size: 18px;
+    font-weight: 200;
+    line-height: 30px;
+    background-color: #eee;
+    border-radius: 6px;
+    padding: 60px;
+}
+
+.hero-unit h1 {
+    font-size: 60px;
+    line-height: 1;
+    letter-spacing: -1px;
+}
+
+table.table_area tr{
+    line-height: 12px;
+}
+
+
+table.table_area td{
+    width: 10px;
+    height: 10px;
+    overflow: hidden;
+    display: inline-block;
+    white-space: nowrap;
+    border: #808080 solid 1px;
+}
+
+table.table_area td.alive{
+    background-color: black;
+}
+

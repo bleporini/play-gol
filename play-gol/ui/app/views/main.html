@@ -1,0 +1,32 @@
+
+
+<div class="row-fluid">
+    <div class="span2">
+        <form novalidate>
+            <label for="rows">Rows</label>
+            <input type="text" id="rows" ng-model="rows" class="input-mini"/>
+            <label for="columns">Columns</label>
+            <input type="text" id="columns" ng-model="columns" class="input-mini"/>
+            <label for="initializer">Initializer</label>
+            <select id="initializer" ng-model="initializer" class="input-small">
+                <option ng-repeat="i in initializers">{{i}}</option>
+            </select>
+            <input type="button" class="btn" ng-click="init()" value="Initialize"/>
+        </form>
+
+    </div>
+    <div class="span10">
+        <input type="button" class="btn" ng-click="next()" value="Next"/>
+        <div class="btn-group"><a class="btn" ng-click="autoNext()">
+            <i class="icon-star"></i>
+        </a></div>
+
+        <table class="table_area">
+            <tr ng-repeat="r in area">
+                <td ng-repeat="c in r" class="{{c.status}}">&nbsp;</td>
+            </tr>
+        </table>
+
+    </div>
+
+</div>

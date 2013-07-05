@@ -1,6 +1,6 @@
 package controllers
 
-import play.api.mvc.Controller
+import play.api.mvc.{Action, Controller}
 import domain._
 import domain.Cell
 
@@ -40,6 +40,31 @@ object GameOfLifeController extends Controller{
     )
   }
 
+  import play.api.libs.json._
 
+
+  implicit val cellMapper= new Reads[Cell] {
+    def reads(js: JsValue) = JsSuccess(
+      Cell(((js \ "x").as[Int], (js \ "y").as[Int]),
+        if ((js \ "status").as[String] == Alive.toString) Alive else Dead)
+    )
+  }
+
+  implicit val rds = __.read[List[Cell]]
+
+  val js = Json.arr(Json.obj("x" -> 1, "y" -> 2, "status" -> "alive"),
+    Json.obj("x" -> 1, "y" -> 2, "status" -> "dead"))
+
+  implicit val cellWriter = new Writes[GameArea] {
+    def writes(area: GameArea) = JsArray(area.map(o=>Json.obj("x" -> o.coordinates._1,
+      "y" -> o.coordinates._2, "status" -> o.status.toString)))
+  }
+
+  def computeNextAction=Action(parse.json){ request =>
+    request.body.validate[GameArea].map {
+      case area => Ok(Json.toJson(computeNext(area)))
+    }.recoverTotal(e => BadRequest)
+
+  }
 
 }
