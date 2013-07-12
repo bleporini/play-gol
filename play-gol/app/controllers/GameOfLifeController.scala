@@ -3,6 +3,7 @@ package controllers
 import play.api.mvc.{Action, Controller}
 import domain._
 import domain.Cell
+import scala.annotation.tailrec
 
 /**
  *
@@ -52,9 +53,6 @@ object GameOfLifeController extends Controller{
 
   implicit val rds = __.read[List[Cell]]
 
-  val js = Json.arr(Json.obj("x" -> 1, "y" -> 2, "status" -> "alive"),
-    Json.obj("x" -> 1, "y" -> 2, "status" -> "dead"))
-
   implicit val cellWriter = new Writes[GameArea] {
     def writes(area: GameArea) = JsArray(area.map(o=>Json.obj("x" -> o.coordinates._1,
       "y" -> o.coordinates._2, "status" -> o.status.toString)))
@@ -65,6 +63,22 @@ object GameOfLifeController extends Controller{
       case area => Ok(Json.toJson(computeNext(area)))
     }.recoverTotal(e => BadRequest)
 
+  }
+
+  import play.api.libs.functional.syntax._
+
+  implicit val batchParser = ((__ \ "nbSteps").read[Int] and (__ \ "area").read[GameArea]) tupled
+
+  def computeNextActionsByBatch=Action(parse.json){request =>
+    request.body.validate[(Int,GameArea)].map{
+      case (steps,area)=> Ok(Json.toJson(computeSteps(steps.toInt,area::Nil)))
+    }.recoverTotal(e=> BadRequest)
+  }
+
+  @tailrec
+  def computeSteps(steps:Int, areas:List[GameArea]):List[GameArea]=(steps, areas) match{
+    case (0, _) => areas.reverse
+    case (s, area::tail)  if s > 0 => computeSteps(s-1, computeNext(area)::areas)
   }
 
 }

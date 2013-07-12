@@ -13,5 +13,6 @@ GET     /assets/*file               controllers.Assets.at(path="/public", file)
 GET     /ui           com.tuplejump.playYeoman.Yeoman.index
 ->  	/ui/           yeoman.Routes
 
-POST    /computeNext    controllers.GameOfLifeController.computeNextAction
+POST    /computeNext            controllers.GameOfLifeController.computeNextAction
+POST    /computeNextByBatch     controllers.GameOfLifeController.computeNextActionsByBatch
 
